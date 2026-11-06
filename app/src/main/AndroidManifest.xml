@@ -6,6 +6,23 @@
     <!-- Weather for where you are. Coarse is enough; the position is rounded to ~1 km before it's sent. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Background refresh (every 30 min) uses the last known position; Android 11 needs this for it. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- The refresh schedule survives a reboot. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!--
+      Weather for Fiero Launcher's home screen and outer screen. Signature permission, declared by both apps
+      (same key): only Fiero apps can send the weather or ask for a refresh.
+    -->
+    <permission
+        android:name="dev.mike.fiero.permission.WEATHER"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="dev.mike.fiero.permission.WEATHER" />
+
+    <queries>
+        <package android:name="dev.mike.fierolauncher" />
+    </queries>
 
     <application
         android:allowBackup="false"
@@ -31,5 +48,19 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize" />
+
+        <service
+            android:name=".RefreshJob"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver
+            android:name=".RefreshReceiver"
+            android:exported="true"
+            android:permission="dev.mike.fiero.permission.WEATHER">
+            <intent-filter>
+                <action android:name="dev.mike.fieroweather.action.REFRESH" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

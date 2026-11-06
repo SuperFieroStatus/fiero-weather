@@ -18,7 +18,6 @@ import dev.mike.fieroweather.ui.KeyRouter
 import dev.mike.fieroweather.ui.ListItem
 import dev.mike.fieroweather.ui.ListScreen
 import dev.mike.fieroweather.ui.RoutedKey
-import org.json.JSONObject
 
 /**
  * Three pages for one place: Now, Hourly (next 24 h), 7 days. ◀ ▶ (or 1 2 3) switch pages, ▲ ▼ scroll.
@@ -77,6 +76,7 @@ class MainActivity : Activity(), KeyActionHandler {
             }
         }
         render()
+        Jobs.schedulePeriodic(this) // keeps Fiero Launcher's weather line fresh
     }
 
     override fun onResume() {
@@ -135,10 +135,7 @@ class MainActivity : Activity(), KeyActionHandler {
         setStatus("Updating…")
         Net.io.execute {
             val result = try {
-                val raw = Net.getJson(Forecast.url(lat, lon)).toString()
-                val parsed = Forecast.parse(JSONObject(raw))
-                val label = name ?: (Geocode.nameFor(lat, lon) ?: "Here")
-                Triple(raw, parsed, label)
+                Updater.fetch(applicationContext, name, lat, lon)
             } catch (e: Exception) {
                 Log.w(KeyRouter.TAG, "forecast failed: $e")
                 null
@@ -150,10 +147,8 @@ class MainActivity : Activity(), KeyActionHandler {
                     setStatus(if (forecast == null) "No connection. Refresh to try again" else "Offline · ${updatedText()}")
                     return@runOnUiThread
                 }
-                val (raw, parsed, label) = result
-                Store.cache(this, label, name == null, raw)
-                forecast = parsed
-                placeName = label
+                forecast = result.forecast
+                placeName = result.placeName
                 shownHere = name == null
                 fetchedAt = System.currentTimeMillis()
                 statusText = ""

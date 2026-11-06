@@ -46,18 +46,28 @@ object Store {
     // ---- cache ----
 
     /** [here]: the forecast is for the current location rather than a saved place. */
-    data class Cached(val placeName: String, val here: Boolean, val json: JSONObject, val fetchedAt: Long)
+    data class Cached(
+        val placeName: String,
+        val here: Boolean,
+        val json: JSONObject,
+        val fetchedAt: Long,
+        val lat: Double,
+        val lon: Double,
+    )
 
-    fun cache(c: Context, placeName: String, here: Boolean, raw: String) = prefs(c).edit()
+    fun cache(c: Context, placeName: String, here: Boolean, lat: Double, lon: Double, raw: String) = prefs(c).edit()
         .putString("cache", JSONObject()
-            .put("place", placeName).put("here", here)
+            .put("place", placeName).put("here", here).put("lat", lat).put("lon", lon)
             .put("at", System.currentTimeMillis()).put("raw", raw).toString())
         .apply()
 
     fun cached(c: Context): Cached? = try {
         prefs(c).getString("cache", null)?.let {
             val o = JSONObject(it)
-            Cached(o.getString("place"), o.optBoolean("here", true), JSONObject(o.getString("raw")), o.getLong("at"))
+            Cached(
+                o.getString("place"), o.optBoolean("here", true), JSONObject(o.getString("raw")), o.getLong("at"),
+                o.optDouble("lat", Double.NaN), o.optDouble("lon", Double.NaN),
+            )
         }
     } catch (e: Exception) {
         null

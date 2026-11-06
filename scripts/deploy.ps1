@@ -108,6 +108,8 @@ if ($LASTEXITCODE -ne 0) { Fail 'adb install failed' }
 # Location permission without the on-screen prompt (the app also asks if it's missing).
 Adb shell pm grant $Package android.permission.ACCESS_FINE_LOCATION
 Adb shell pm grant $Package android.permission.ACCESS_COARSE_LOCATION
+# Background refresh for Fiero Launcher's weather line uses the last known position.
+Adb shell pm grant $Package android.permission.ACCESS_BACKGROUND_LOCATION
 
 if (-not $NoLaunch) {
     Adb logcat -c

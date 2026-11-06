@@ -17,6 +17,9 @@ the keypad; no touch screen, Google Play services or account needed.
 - Opens instantly with the last forecast and refreshes it when it's over 30 minutes old. Still shows the
   last forecast (and when it's from) with no signal.
 - US units: °F, mph.
+- **With [Fiero Launcher](https://github.com/SuperFieroStatus/fiero-launcher):** refreshes every 30 minutes in
+  the background and shows the current conditions under the home-screen clock and on the TCL Flip 2's outer
+  screen. (The launcher has no internet access of its own; it gets the line from here.)
 
 ## Keys
 
@@ -39,6 +42,7 @@ turned on in the phone's Developer options.
 ```bash
 adb install -r fiero-weather-0.1.0.apk
 adb shell pm grant dev.mike.fieroweather android.permission.ACCESS_COARSE_LOCATION   # or allow it on first start
+adb shell pm grant dev.mike.fieroweather android.permission.ACCESS_BACKGROUND_LOCATION # background refresh for the launcher
 ```
 
 It shows up as **Fiero Weather** in the app list (on [Fiero Launcher](https://github.com/SuperFieroStatus/fiero-launcher),
