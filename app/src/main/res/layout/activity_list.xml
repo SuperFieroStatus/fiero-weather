@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Places screen: title, search entry line, list, soft keys. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:background="@color/strip_bg"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:singleLine="true"
+        android:textColor="@color/text"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Entry / info line, with the search input-mode badge (Abc, abc, ABC, 123) on its right -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="start"
+            android:minHeight="30dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="8dp"
+            android:singleLine="true"
+            android:textColor="@color/text"
+            android:textSize="17sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="6dp"
+            android:background="@color/highlight"
+            android:paddingHorizontal="5dp"
+            android:singleLine="true"
+            android:textColor="@color/highlight_text"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <dev.mike.fieroweather.ui.ListScreen
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <include layout="@layout/soft_keys" />
+</LinearLayout>
