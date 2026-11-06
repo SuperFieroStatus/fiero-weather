@@ -207,7 +207,7 @@ class MainActivity : Activity(), KeyActionHandler {
         condition.text = Wmo.text(n.code)
         lines[0].text = "Feels ${Fmt.temp(n.feels)}" + (today?.let { " · H ${Fmt.temp(it.hi)} L ${Fmt.temp(it.lo)}" } ?: "")
         lines[1].text = listOfNotNull(
-            today?.rain?.takeIf { it >= 0 }?.let { "Rain $it%" },
+            f.rainSoon.takeIf { it >= 0 }?.let { "Rain $it%" },
             "Wind ${Fmt.wind(n.wind, n.windDir)}",
         ).joinToString(" · ")
         lines[2].text = listOfNotNull(

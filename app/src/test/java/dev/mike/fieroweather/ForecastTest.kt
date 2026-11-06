@@ -48,6 +48,12 @@ class ForecastTest {
         assertEquals("Mon", Fmt.weekday(LocalDate.of(2026, 11, 9), today))
     }
 
+    @Test fun rainSoonIsTheHighestUpcomingHour() {
+        assertEquals(5, f.rainSoon) // 15:00 = 5%, 16:00 unknown; 14:00's hour is past
+        val noHours = f.copy(hours = emptyList())
+        assertEquals(20, noHours.rainSoon) // falls back to today's chance
+    }
+
     @Test fun compassAndCalm() {
         assertEquals("N", Fmt.compass(350))
         assertEquals("N", Fmt.compass(10))

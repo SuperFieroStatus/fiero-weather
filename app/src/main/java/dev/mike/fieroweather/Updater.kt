@@ -131,6 +131,7 @@ object Launcher {
             .putExtra("temp", Fmt.temp(f.now.temp))
             .putExtra("text", Wmo.text(f.now.code))
             .putExtra("hilo", today?.let { "H ${Fmt.temp(it.hi)} L ${Fmt.temp(it.lo)}" } ?: "")
+            .putExtra("rain", f.rainSoon) // % chance in the next 12 hours, -1 unknown
             .putExtra("place", place)
             .putExtra("at", at)
         c.sendBroadcast(intent, PERMISSION)

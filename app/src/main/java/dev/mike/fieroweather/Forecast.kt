@@ -12,6 +12,14 @@ import kotlin.math.roundToInt
 /** One Open-Meteo forecast, already in °F / mph and the place's local time. */
 data class Forecast(val now: Now, val hours: List<Hour>, val days: List<Day>) {
 
+    /**
+     * Chance of rain over the next [RAIN_HOURS] hours (the highest hourly chance), or -1 if unknown. More
+     * useful at a glance than the whole day's figure, which still counts hours already gone.
+     */
+    val rainSoon: Int
+        get() = hours.take(RAIN_HOURS).map { it.rain }.filter { it >= 0 }.maxOrNull()
+            ?: days.firstOrNull()?.rain ?: -1
+
     data class Now(
         val time: LocalDateTime,
         val temp: Double,
@@ -38,6 +46,9 @@ data class Forecast(val now: Now, val hours: List<Hour>, val days: List<Day>) {
     companion object {
         /** Hours shown on the Hourly page, starting with the current hour. */
         const val HOURS = 24
+
+        /** Window for [rainSoon]. */
+        const val RAIN_HOURS = 12
 
         fun url(lat: Double, lon: Double): String =
             "https://api.open-meteo.com/v1/forecast" +
